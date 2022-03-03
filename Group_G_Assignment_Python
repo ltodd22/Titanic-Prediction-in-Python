@@ -1,0 +1,1640 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Titanic Report - Group G Assignment"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## 1. Exploratory Data Analysis"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### 1.1 Read the dataset correctly using pandas, using an appropriate column as index (1 point)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import pandas as pd\n",
+    "import numpy as np"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# we read the data using 'PassengerId' as index and reading 'Survived' as boolean\n",
+    "df = pd.read_csv('train.csv', index_col=0, dtype={'Survived':bool})"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Survived</th>\n",
+       "      <th>Pclass</th>\n",
+       "      <th>Name</th>\n",
+       "      <th>Sex</th>\n",
+       "      <th>Age</th>\n",
+       "      <th>SibSp</th>\n",
+       "      <th>Parch</th>\n",
+       "      <th>Ticket</th>\n",
+       "      <th>Fare</th>\n",
+       "      <th>Cabin</th>\n",
+       "      <th>Embarked</th>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>PassengerId</th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>False</td>\n",
+       "      <td>3</td>\n",
+       "      <td>Braund, Mr. Owen Harris</td>\n",
+       "      <td>male</td>\n",
+       "      <td>22.0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>A/5 21171</td>\n",
+       "      <td>7.2500</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>S</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>True</td>\n",
+       "      <td>1</td>\n",
+       "      <td>Cumings, Mrs. John Bradley (Florence Briggs Th...</td>\n",
+       "      <td>female</td>\n",
+       "      <td>38.0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>PC 17599</td>\n",
+       "      <td>71.2833</td>\n",
+       "      <td>C85</td>\n",
+       "      <td>C</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>True</td>\n",
+       "      <td>3</td>\n",
+       "      <td>Heikkinen, Miss. Laina</td>\n",
+       "      <td>female</td>\n",
+       "      <td>26.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>STON/O2. 3101282</td>\n",
+       "      <td>7.9250</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>S</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>True</td>\n",
+       "      <td>1</td>\n",
+       "      <td>Futrelle, Mrs. Jacques Heath (Lily May Peel)</td>\n",
+       "      <td>female</td>\n",
+       "      <td>35.0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>113803</td>\n",
+       "      <td>53.1000</td>\n",
+       "      <td>C123</td>\n",
+       "      <td>S</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>5</th>\n",
+       "      <td>False</td>\n",
+       "      <td>3</td>\n",
+       "      <td>Allen, Mr. William Henry</td>\n",
+       "      <td>male</td>\n",
+       "      <td>35.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>373450</td>\n",
+       "      <td>8.0500</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>S</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "             Survived  Pclass  \\\n",
+       "PassengerId                     \n",
+       "1               False       3   \n",
+       "2                True       1   \n",
+       "3                True       3   \n",
+       "4                True       1   \n",
+       "5               False       3   \n",
+       "\n",
+       "                                                          Name     Sex   Age  \\\n",
+       "PassengerId                                                                    \n",
+       "1                                      Braund, Mr. Owen Harris    male  22.0   \n",
+       "2            Cumings, Mrs. John Bradley (Florence Briggs Th...  female  38.0   \n",
+       "3                                       Heikkinen, Miss. Laina  female  26.0   \n",
+       "4                 Futrelle, Mrs. Jacques Heath (Lily May Peel)  female  35.0   \n",
+       "5                                     Allen, Mr. William Henry    male  35.0   \n",
+       "\n",
+       "             SibSp  Parch            Ticket     Fare Cabin Embarked  \n",
+       "PassengerId                                                          \n",
+       "1                1      0         A/5 21171   7.2500   NaN        S  \n",
+       "2                1      0          PC 17599  71.2833   C85        C  \n",
+       "3                0      0  STON/O2. 3101282   7.9250   NaN        S  \n",
+       "4                1      0            113803  53.1000  C123        S  \n",
+       "5                0      0            373450   8.0500   NaN        S  "
+      ]
+     },
+     "execution_count": 3,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "#take a look at the data\n",
+    "df.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "<class 'pandas.core.frame.DataFrame'>\n",
+      "Int64Index: 891 entries, 1 to 891\n",
+      "Data columns (total 11 columns):\n",
+      " #   Column    Non-Null Count  Dtype  \n",
+      "---  ------    --------------  -----  \n",
+      " 0   Survived  891 non-null    bool   \n",
+      " 1   Pclass    891 non-null    int64  \n",
+      " 2   Name      891 non-null    object \n",
+      " 3   Sex       891 non-null    object \n",
+      " 4   Age       714 non-null    float64\n",
+      " 5   SibSp     891 non-null    int64  \n",
+      " 6   Parch     891 non-null    int64  \n",
+      " 7   Ticket    891 non-null    object \n",
+      " 8   Fare      891 non-null    float64\n",
+      " 9   Cabin     204 non-null    object \n",
+      " 10  Embarked  889 non-null    object \n",
+      "dtypes: bool(1), float64(2), int64(3), object(5)\n",
+      "memory usage: 77.4+ KB\n"
+     ]
+    }
+   ],
+   "source": [
+    "#see how many rows and nulls we have and confirm that data types are appropriate\n",
+    "df.info()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### 1.2 Compute the percentage of survivors out of total number of passengers and the percentage of men and women out of total number of passengers (0.5 points)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We previously saw that Sex doesn't have any null values, but we still want to confirm that the values contained make sense (only male and female). After confirming that, we can proceed to calculate the percentages."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "male      577\n",
+       "female    314\n",
+       "Name: Sex, dtype: int64"
+      ]
+     },
+     "execution_count": 5,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df.Sex.value_counts()  #confirming that sex is only male or female"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "surv = df.Survived.sum()/len(df)*100\n",
+    "male = len(df[df.Sex=='male'])/len(df)*100\n",
+    "female = len(df[df.Sex=='female'])/len(df)*100"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "38.38% of the total number of passengers survived\n",
+      "64.76% of the total number of passengers were men\n",
+      "35.24% of the total number of passengers were women\n"
+     ]
+    }
+   ],
+   "source": [
+    "print('{}% of the total number of passengers survived'.format(surv.round(2)))      #numpy round \n",
+    "print('{}% of the total number of passengers were men'.format(round(male,2)))      #python round \n",
+    "print('{}% of the total number of passengers were women'.format(round(female,2)))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### 1.3 Compute the percentage of survivors by sex (i.e. the percentage of male passengers that survived and female passengers that survived) and the sex distribution of survivors (i.e. percentage of survivors that were men and percentage of survivors that were women) (0.5 points)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "To calculate the % of male passengers that survived we want to count the number of passengers where sex is male and survived is true, and divide it by the number of male passengers. Same with female."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "surv_m = len(df.loc[(df.Survived==True)&(df.Sex=='male')])/len(df[df.Sex=='male'])*100\n",
+    "surv_f = len(df.loc[(df.Survived==True)&(df.Sex=='female')])/len(df[df.Sex=='female'])*100"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "18.89% of male passengers survived\n",
+      "74.2% of female passengers survived\n"
+     ]
+    }
+   ],
+   "source": [
+    "print('{}% of male passengers survived'.format(round(surv_m,2)))      \n",
+    "print('{}% of female passengers survived'.format(round(surv_f,2)))      "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Now to get the sex distribution of survivors we do something similar but only taking into account those passengers that survived."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "surv_m_total = len(df.loc[(df.Survived==True)&(df.Sex=='male')])/len(df[df.Survived==True])*100\n",
+    "surv_f_total = len(df.loc[(df.Survived==True)&(df.Sex=='female')])/len(df[df.Survived==True])*100"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "31.87% of survivors were male\n",
+      "68.13% of survivors were female\n"
+     ]
+    }
+   ],
+   "source": [
+    "print('{}% of survivors were male'.format(round(surv_m_total,2)))      \n",
+    "print('{}% of survivors were female'.format(round(surv_f_total,2)))      "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Another way of doing this is doing the value count of sex for those who survived:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "female    0.681287\n",
+       "male      0.318713\n",
+       "Name: Sex, dtype: float64"
+      ]
+     },
+     "execution_count": 12,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df[df.Survived==True].Sex.value_counts(normalize=True)    #normalize=True returns proportions instead of count"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### 1.4 Display in a 2 x 2 DataFrame the probability of being male/female and surviving/not surviving (0.5 points)\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "One way is using a pivot table."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th>Survived</th>\n",
+       "      <th>False</th>\n",
+       "      <th>True</th>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>Sex</th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>female</th>\n",
+       "      <td>0.09</td>\n",
+       "      <td>0.26</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>male</th>\n",
+       "      <td>0.53</td>\n",
+       "      <td>0.12</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "Survived  False  True \n",
+       "Sex                   \n",
+       "female     0.09   0.26\n",
+       "male       0.53   0.12"
+      ]
+     },
+     "execution_count": 13,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "(df.pivot_table(index='Sex',columns='Survived',aggfunc=\"size\")/len(df)).apply(lambda x: x.round(2))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Another way is using Pandas' crosstab:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th>Survived</th>\n",
+       "      <th>False</th>\n",
+       "      <th>True</th>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>Sex</th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>female</th>\n",
+       "      <td>0.09</td>\n",
+       "      <td>0.26</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>male</th>\n",
+       "      <td>0.53</td>\n",
+       "      <td>0.12</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "Survived  False  True \n",
+       "Sex                   \n",
+       "female     0.09   0.26\n",
+       "male       0.53   0.12"
+      ]
+     },
+     "execution_count": 14,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "pd.crosstab(df.Sex,df.Survived,margins=False,normalize=True).round(2)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "1.0"
+      ]
+     },
+     "execution_count": 15,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "##just to confirm that the values add to 1\n",
+    "(pd.crosstab(df.Sex,df.Survived,margins=False,normalize=True)).round(2).sum().sum()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### 1.5 Display in a DataFrame the probability of survival/not survival of all combinations of sex and class (0.5 points)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Survived</th>\n",
+       "      <th>False</th>\n",
+       "      <th>True</th>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>Sex</th>\n",
+       "      <th>Pclass</th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th rowspan=\"3\" valign=\"top\">female</th>\n",
+       "      <th>1</th>\n",
+       "      <td>0.003</td>\n",
+       "      <td>0.102</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>0.007</td>\n",
+       "      <td>0.079</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>0.081</td>\n",
+       "      <td>0.081</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th rowspan=\"3\" valign=\"top\">male</th>\n",
+       "      <th>1</th>\n",
+       "      <td>0.086</td>\n",
+       "      <td>0.051</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>0.102</td>\n",
+       "      <td>0.019</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>0.337</td>\n",
+       "      <td>0.053</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "Survived       False  True \n",
+       "Sex    Pclass              \n",
+       "female 1       0.003  0.102\n",
+       "       2       0.007  0.079\n",
+       "       3       0.081  0.081\n",
+       "male   1       0.086  0.051\n",
+       "       2       0.102  0.019\n",
+       "       3       0.337  0.053"
+      ]
+     },
+     "execution_count": 16,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "(df.pivot_table(index=['Sex','Pclass'],columns='Survived',aggfunc='size')/len(df)).round(3)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    " "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# 2. Imputing missing values"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### 2.1 Devise two different strategies to impute the missing values in the Age column (3 points)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0.199"
+      ]
+     },
+     "execution_count": 17,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "(df.Age.isnull().sum()/len(df)).round(3)      #proportion of missing values"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The first approach will be really basic and straightforward but fast and easy to implement using Pandas."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df['Age_1'] = df.Age.fillna(value=round(df.Age.mean(),0))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0"
+      ]
+     },
+     "execution_count": 19,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df.Age_1.isnull().sum() #confirming that there are no missing values in this new column"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "29.69911764705882\n",
+      "29.758888888888887\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(df.Age.mean())      #comparing the new mean with the mean with missing values\n",
+    "print(df.Age_1.mean())"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "That was really easy and fast, but also lazy and probably not the best strategy. Before deciding our second approach we'll do some EDA on the variable Age to see if there's something interesting that can be used."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "count    714.000000\n",
+       "mean      29.699118\n",
+       "std       14.526497\n",
+       "min        0.420000\n",
+       "25%       20.125000\n",
+       "50%       28.000000\n",
+       "75%       38.000000\n",
+       "max       80.000000\n",
+       "Name: Age, dtype: float64"
+      ]
+     },
+     "execution_count": 21,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df.Age.describe()     #descriptive stats"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "There seems to be no outliers (min age is 0.42 and max age is 80, both numbers make sense) but it looks like most of the people are young (75% of passengers are no more than 38 years old)."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We'll check the average age grouping by some variables. We choose mean and not median because we consider that we should't worry about outliers."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "metadata": {
+    "scrolled": false
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Survived\n",
+       "False    30.626179\n",
+       "True     28.343690\n",
+       "Name: Age, dtype: float64"
+      ]
+     },
+     "execution_count": 22,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df.groupby('Survived').Age.mean()   #doesn't seem to be too important"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Pclass\n",
+       "1    38.233441\n",
+       "2    29.877630\n",
+       "3    25.140620\n",
+       "Name: Age, dtype: float64"
+      ]
+     },
+     "execution_count": 23,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df.groupby('Pclass').Age.mean()      #this is interesting: there are huge age differences between classes"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Sex\n",
+       "female    27.915709\n",
+       "male      30.726645\n",
+       "Name: Age, dtype: float64"
+      ]
+     },
+     "execution_count": 24,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df.groupby('Sex').Age.mean()          #doesn't seem to be too important"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "SibSp\n",
+       "0    31.397558\n",
+       "1    30.089727\n",
+       "2    22.620000\n",
+       "3    13.916667\n",
+       "4     7.055556\n",
+       "5    10.200000\n",
+       "8          NaN\n",
+       "Name: Age, dtype: float64"
+      ]
+     },
+     "execution_count": 25,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df.groupby('SibSp').Age.mean()       #difficult to interpret but interesting information"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Parch\n",
+       "0    32.178503\n",
+       "1    24.422000\n",
+       "2    17.216912\n",
+       "3    33.200000\n",
+       "4    44.500000\n",
+       "5    39.200000\n",
+       "6    43.000000\n",
+       "Name: Age, dtype: float64"
+      ]
+     },
+     "execution_count": 26,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df.groupby('Parch').Age.mean()       #this can be confusing: 0, 1 or 2 Parch can refer either to childrens \n",
+    "                                     #(old people) or parents (young people). From 3 onwards must refer to \n",
+    "                                     #childrens (as one shouldn't have more than 2 parents) and this can be useful"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 27,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Embarked\n",
+       "C    30.814769\n",
+       "Q    28.089286\n",
+       "S    29.445397\n",
+       "Name: Age, dtype: float64"
+      ]
+     },
+     "execution_count": 27,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df.groupby('Embarked').Age.mean()    #doesn't seem to be too important"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Cabin may be hard to use as it has too many different unique values (147)."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 28,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "147"
+      ]
+     },
+     "execution_count": 28,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df.Cabin.nunique()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 29,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([nan, 'C85', 'C123', 'E46', 'G6'], dtype=object)"
+      ]
+     },
+     "execution_count": 29,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df.Cabin.unique()[:5]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 30,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'T'}"
+      ]
+     },
+     "execution_count": 30,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "set([e[0] for e in df.Cabin.unique() if type(e)==str])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "As Cabin has too many different values, we'll extract the first letter of the cabins and store it in a new column so we can include this information in our analysis."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 31,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df['Cabin_1'] = [e[0] if type(e)==str else np.nan for e in df.Cabin]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 32,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "C    59\n",
+       "B    47\n",
+       "D    33\n",
+       "E    32\n",
+       "A    15\n",
+       "F    13\n",
+       "G     4\n",
+       "T     1\n",
+       "Name: Cabin_1, dtype: int64"
+      ]
+     },
+     "execution_count": 32,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df.Cabin_1.value_counts()          #this is an unequal distribution"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 33,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Cabin_1\n",
+       "A    44.833333\n",
+       "B    34.955556\n",
+       "C    36.086667\n",
+       "D    39.032258\n",
+       "E    38.116667\n",
+       "F    19.954545\n",
+       "G    14.750000\n",
+       "T    45.000000\n",
+       "Name: Age, dtype: float64"
+      ]
+     },
+     "execution_count": 33,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df.groupby('Cabin_1').Age.mean()    #maybe Cabins F and G have younger people, but they have too few people \n",
+    "                                    #so it won't be too useful"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The variables that seem to have the biggest difference in age distributions are Pclass and Sibsp (# of siblings / spouses aboard the Titanic), so we can use that information to fill the missing values."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 34,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Pclass  SibSp\n",
+       "1       0        39.181416\n",
+       "        1        37.414154\n",
+       "        2        37.200000\n",
+       "        3        22.000000\n",
+       "2       0        31.934220\n",
+       "        1        27.363636\n",
+       "        2        19.125000\n",
+       "        3        30.000000\n",
+       "3       0        27.630201\n",
+       "        1        24.912698\n",
+       "        2        18.875000\n",
+       "        3         8.875000\n",
+       "        4         7.055556\n",
+       "        5        10.200000\n",
+       "        8              NaN\n",
+       "Name: Age, dtype: float64"
+      ]
+     },
+     "execution_count": 34,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df.groupby(['Pclass','SibSp']).Age.mean()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We will input the missing values with the information from the table above (for example: if there is a missing value for age for someone of Pclass 1 and with 0 SibSp we'll input an age of 39 years)."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 35,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "ages = []                                     #this creates a new list in which each value is the age if it's\n",
+    "                                              #not null or the average age of the specific category as explained\n",
+    "for e in df.itertuples():                     #above, and then this list will be added to the dataframe as a new\n",
+    "    if e.Age!=e.Age:                          #column\n",
+    "        if e.Pclass == 1:\n",
+    "            if e.SibSp == 0:\n",
+    "                ages.append(39.0)\n",
+    "            elif e.SibSp == 1:\n",
+    "                ages.append(37.0)\n",
+    "            elif e.SibSp == 2:\n",
+    "                ages.append(37.0)\n",
+    "            elif e.SibSp == 3:\n",
+    "                ages.append(22.0)\n",
+    "        elif e.Pclass == 2:\n",
+    "            if e.SibSp == 0:\n",
+    "                ages.append(32.0)\n",
+    "            elif e.SibSp == 1:\n",
+    "                ages.append(27.0)\n",
+    "            elif e.SibSp == 2:\n",
+    "                ages.append(19.0)\n",
+    "            elif e.SibSp == 3:\n",
+    "                ages.append(30.0)\n",
+    "        elif e.Pclass == 3:\n",
+    "            if e.SibSp == 0:\n",
+    "                ages.append(28.0)\n",
+    "            elif e.SibSp == 1:\n",
+    "                ages.append(25.0)\n",
+    "            elif e.SibSp == 2:\n",
+    "                ages.append(19.0)\n",
+    "            elif e.SibSp == 3:\n",
+    "                ages.append(9.0)\n",
+    "            elif e.SibSp == 4:\n",
+    "                ages.append(7.0)\n",
+    "            elif e.SibSp == 5:\n",
+    "                ages.append(10.0)\n",
+    "            elif e.SibSp == 8:\n",
+    "                ages.append(25.0)        #average age of Pclass 3\n",
+    "            \n",
+    "    else:\n",
+    "        ages.append(e.Age)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 36,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df['Age_2'] = ages"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 37,
+   "metadata": {
+    "scrolled": false
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Survived</th>\n",
+       "      <th>Pclass</th>\n",
+       "      <th>Name</th>\n",
+       "      <th>Sex</th>\n",
+       "      <th>Age</th>\n",
+       "      <th>SibSp</th>\n",
+       "      <th>Parch</th>\n",
+       "      <th>Ticket</th>\n",
+       "      <th>Fare</th>\n",
+       "      <th>Cabin</th>\n",
+       "      <th>Embarked</th>\n",
+       "      <th>Age_1</th>\n",
+       "      <th>Cabin_1</th>\n",
+       "      <th>Age_2</th>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>PassengerId</th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>False</td>\n",
+       "      <td>3</td>\n",
+       "      <td>Braund, Mr. Owen Harris</td>\n",
+       "      <td>male</td>\n",
+       "      <td>22.0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>A/5 21171</td>\n",
+       "      <td>7.2500</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>S</td>\n",
+       "      <td>22.0</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>22.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>True</td>\n",
+       "      <td>1</td>\n",
+       "      <td>Cumings, Mrs. John Bradley (Florence Briggs Th...</td>\n",
+       "      <td>female</td>\n",
+       "      <td>38.0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>PC 17599</td>\n",
+       "      <td>71.2833</td>\n",
+       "      <td>C85</td>\n",
+       "      <td>C</td>\n",
+       "      <td>38.0</td>\n",
+       "      <td>C</td>\n",
+       "      <td>38.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>True</td>\n",
+       "      <td>3</td>\n",
+       "      <td>Heikkinen, Miss. Laina</td>\n",
+       "      <td>female</td>\n",
+       "      <td>26.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>STON/O2. 3101282</td>\n",
+       "      <td>7.9250</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>S</td>\n",
+       "      <td>26.0</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>26.0</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "             Survived  Pclass  \\\n",
+       "PassengerId                     \n",
+       "1               False       3   \n",
+       "2                True       1   \n",
+       "3                True       3   \n",
+       "\n",
+       "                                                          Name     Sex   Age  \\\n",
+       "PassengerId                                                                    \n",
+       "1                                      Braund, Mr. Owen Harris    male  22.0   \n",
+       "2            Cumings, Mrs. John Bradley (Florence Briggs Th...  female  38.0   \n",
+       "3                                       Heikkinen, Miss. Laina  female  26.0   \n",
+       "\n",
+       "             SibSp  Parch            Ticket     Fare Cabin Embarked  Age_1  \\\n",
+       "PassengerId                                                                  \n",
+       "1                1      0         A/5 21171   7.2500   NaN        S   22.0   \n",
+       "2                1      0          PC 17599  71.2833   C85        C   38.0   \n",
+       "3                0      0  STON/O2. 3101282   7.9250   NaN        S   26.0   \n",
+       "\n",
+       "            Cabin_1  Age_2  \n",
+       "PassengerId                 \n",
+       "1               NaN   22.0  \n",
+       "2                 C   38.0  \n",
+       "3               NaN   26.0  "
+      ]
+     },
+     "execution_count": 37,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df.head(3)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 38,
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0"
+      ]
+     },
+     "execution_count": 38,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df.Age_2.isnull().sum()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 39,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "29.69911764705882"
+      ]
+     },
+     "execution_count": 39,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df.Age.mean()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 40,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "29.561358024691355"
+      ]
+     },
+     "execution_count": 40,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df.Age_2.mean()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### 2.2 Compare the two strategies by computing the standard deviation of the overall Age column after applying each of them, as well as the standard deviation of each group of sex and class (1 point)."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 41,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "St. dev. of age with missing values:                   14.53\n",
+      "St. dev. of age without missing values (Strategy 1):   13.0\n",
+      "St. dev. of age without missing values (Strategy 2):   13.23\n"
+     ]
+    }
+   ],
+   "source": [
+    "print('St. dev. of age with missing values:                  ',round(df.Age.std(),2))\n",
+    "print('St. dev. of age without missing values (Strategy 1):  ',round(df.Age_1.std(),2))\n",
+    "print('St. dev. of age without missing values (Strategy 2):  ',round(df.Age_2.std(),2))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "To compare the standard deviation of each group of sex and class we create a dataframe with all the information."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 42,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df_std = pd.DataFrame(df.groupby(['Sex','Pclass']).Age.std())\n",
+    "\n",
+    "df_std['Age_1'] = [e for e in df.groupby(['Sex','Pclass']).Age_1.std()]\n",
+    "df_std['Age_2'] = [e for e in df.groupby(['Sex','Pclass']).Age_2.std()]\n",
+    "\n",
+    "df_std.rename(columns={'Age':'Age_std','Age_1':'Age_1_std','Age_2':'Age_2_std'},inplace=True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 43,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th>Age_std</th>\n",
+       "      <th>Age_1_std</th>\n",
+       "      <th>Age_2_std</th>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>Sex</th>\n",
+       "      <th>Pclass</th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th rowspan=\"3\" valign=\"top\">female</th>\n",
+       "      <th>1</th>\n",
+       "      <td>13.612052</td>\n",
+       "      <td>13.008383</td>\n",
+       "      <td>12.971490</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>12.872702</td>\n",
+       "      <td>12.701573</td>\n",
+       "      <td>12.710879</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>12.729964</td>\n",
+       "      <td>11.340906</td>\n",
+       "      <td>11.158148</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th rowspan=\"3\" valign=\"top\">male</th>\n",
+       "      <th>1</th>\n",
+       "      <td>15.139570</td>\n",
+       "      <td>14.412252</td>\n",
+       "      <td>13.790386</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>14.793894</td>\n",
+       "      <td>14.159550</td>\n",
+       "      <td>14.162374</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>12.159514</td>\n",
+       "      <td>10.492921</td>\n",
+       "      <td>10.462000</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "                 Age_std  Age_1_std  Age_2_std\n",
+       "Sex    Pclass                                 \n",
+       "female 1       13.612052  13.008383  12.971490\n",
+       "       2       12.872702  12.701573  12.710879\n",
+       "       3       12.729964  11.340906  11.158148\n",
+       "male   1       15.139570  14.412252  13.790386\n",
+       "       2       14.793894  14.159550  14.162374\n",
+       "       3       12.159514  10.492921  10.462000"
+      ]
+     },
+     "execution_count": 43,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df_std"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.5"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}
