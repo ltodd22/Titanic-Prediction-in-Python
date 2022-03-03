@@ -1,0 +1,5 @@
+
+The code took data from the Titanic dataset, with the Train data being aware of who survived or not.
+
+Python's pandas were used to clean data, sort it, and ultimately discover relationships for predicting who survived when it came to using the Test data (which did not say if people had survived or not).
+
